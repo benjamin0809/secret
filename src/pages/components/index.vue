@@ -3,28 +3,35 @@
         <image class="logo" src="../../static/logo.png"></image>
 		<view>
             <text class="title">{{title}}</text>
-			<button class="title" @click="change">navigate</button>
+            <view class="image-item" v-for="(item) in list" :key="item.id">
+                <view class="image-content">
+                    <image style="width: 200px; height: 200px; background-color: #eeeeee;" :mode="item.mode" :src="item.fullpath"
+                        @error="imageError"></image>
+                </view>
+                <view class="image-title">{{item.text}}</view>
+            </view>
         </view>
 	</view>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
+    import Hupu from '../../api/hupu'
 	export default Vue.extend({
 		data() {
 			return {
-				title: 'Hello'
+				title: 'Hello, Im Component',
+                list: []
 			}
 		},
 		onLoad() {
-
+            this.getImages()
 		},
 		methods: {
-			change() {
-				uni.navigateTo({ url: '/pages/components/index', fail: (error) => {
-					console.log(error)
-				}})
-			}
+            async getImages() {
+               (this.list as any) = await new Hupu().getMobileImages()
+            }
+            
 		}
 	});
 </script>
